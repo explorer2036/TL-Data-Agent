@@ -1,0 +1,23 @@
+app:
+  heartbeat_interval: 5 # the interval time for heartbeat jobs(>=10, unit: second)
+  collect_interval: 5 # the interval time for collect jobs(>=30 unit: second)
+  gateway_addr: "192.168.0.4:15001" # the gateway address
+  listen_addr: "localhost:5001" # http server for login ui
+  base_dir: "E:\\go\\src\\base" # base directory for program files
+  application: "8af9b71b-5637-435c-9f4c-fb82e17dd114" # application id for fusion authentization
+
+tls:
+  switch: false # the switch for the ca certification(default closed)
+  perm: "cert/client.pem" # the perm file for ca certification in grpc client
+  key: "cert/client.key" # the key file for ca certification in grpc client
+  ca: "cert/ca.pem" # the ca file for ca certification in grpc client
+
+log:
+  output_level: "info" # the log level with value in [debug, info, warn, error]
+  output_path: "stdout" # a file system path to write the log data to
+  rotation_path: "./logs/TL-Data-Agent.log" # the path to a rotating log file
+  rotation_max_size: 100 # the maximum size in megabytes of a log file before it get rotated. It defaults to 100 megabytes.
+  rotation_max_age: 30 # the maximum number of days to retain old log files based on the timestamp encoded in their filename
+  rotation_max_backups: 1000 # the maximum number of old log files to retain
+  json_encoding: false # whether the log is formatted as JSON
+
