@@ -2,6 +2,7 @@ package main
 
 import (
 	"TL-Data-Agent/crypto"
+	"TL-Data-Agent/log"
 	"TL-Data-Agent/proto/gateway"
 	"context"
 	"net/http"
@@ -15,7 +16,6 @@ import (
 var (
 	encryptKey    = "zYUTfA6Sa1lxTA43"
 	encryptedFile = "login.dat"
-	uuidFile      = "uuid.dat"
 )
 
 // User for login id and password
@@ -28,7 +28,7 @@ type User struct {
 	Healthy  bool
 }
 
-// Check if the login status is healthy
+// Health - Check if the login status is healthy
 func (p *Program) Health(request *restful.Request, response *restful.Response) {
 	if p.healthy {
 		response.WriteEntity("healthy")
@@ -128,6 +128,8 @@ func (p *Program) Login(request *restful.Request, response *restful.Response) {
 	p.user.Token = reply.Token
 	// format the uuid to user id
 	p.user.UserID = uuid2id(reply.UserID)
+	p.user.UUID = reply.Source
+	log.Infof("login response: %v", reply)
 
 	// mark ready to send messages
 	p.ready = true

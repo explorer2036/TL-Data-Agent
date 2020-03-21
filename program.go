@@ -17,7 +17,6 @@ import (
 
 	"github.com/emicklei/go-restful"
 	"github.com/kardianos/service"
-	uuid "github.com/satori/go.uuid"
 	"golang.org/x/sys/windows"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -207,50 +206,12 @@ func (p *Program) startServer(wg *sync.WaitGroup) {
 	}()
 }
 
-// load the uuid for user
-func (p *Program) load(name string) error {
-	// if the file is existed, read the uuid
-	if exists(name) {
-		data, err := ioutil.ReadFile(name)
-		if err != nil {
-			return err
-		}
-		p.user.UUID = string(data)
-
-		return nil
-	}
-
-	// generate the uuid
-	u := uuid.NewV4()
-
-	// create the uuid file
-	file, err := os.Create(name)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-
-	// write the uuid to file
-	if _, err := file.Write([]byte(u.String())); err != nil {
-		return err
-	}
-	p.user.UUID = u.String()
-
-	return nil
-}
-
 // run the service logic
 func (p *Program) run() error {
 	// check if the program is already running
 	handle, err := p.hasLockfile()
 	if err != nil {
 		log.Error("A collector process is already running")
-		os.Exit(1)
-	}
-
-	// try to load the uuid
-	if err := p.load(uuidFile); err != nil {
-		log.Errorf("load the uuid: %v", err)
 		os.Exit(1)
 	}
 
